@@ -182,6 +182,12 @@ class ComposeWindow @ExperimentalComposeUiApi constructor(
      */
     var isTransparent: Boolean by composePanel::isWindowTransparent
 
+    internal var previousPlacement: WindowPlacement? = null
+        set(value) {
+            if (value != WindowPlacement.Fullscreen)
+                field = value
+        }
+
     var placement: WindowPlacement
         get() = when {
             isFullscreen -> WindowPlacement.Fullscreen
@@ -194,12 +200,22 @@ class ComposeWindow @ExperimentalComposeUiApi constructor(
                     isFullscreen = true
                 }
                 WindowPlacement.Maximized -> {
-                    isFullscreen = false
-                    isMaximized = true
+                    println("previousPlacement = $previousPlacement")
+                    if (isFullscreen) {
+                        isFullscreen = false
+                        isMaximized = previousPlacement == WindowPlacement.Maximized
+                    } else {
+                        isMaximized = true
+                    }
                 }
                 WindowPlacement.Floating -> {
-                    isFullscreen = false
-                    isMaximized = false
+                    println("previousPlacement = $previousPlacement")
+                    if (isFullscreen) {
+                        isFullscreen = false
+                        isMaximized = previousPlacement == WindowPlacement.Floating
+                    } else {
+                        isMaximized = false
+                    }
                 }
             }
         }

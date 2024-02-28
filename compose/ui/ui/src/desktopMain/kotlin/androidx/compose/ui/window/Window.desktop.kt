@@ -193,6 +193,7 @@ fun Window(
                 listeners.windowStateListenerRef.registerWithAndSet(this) {
                     currentState.placement = placement
                     currentState.isMinimized = isMinimized
+                    previousPlacement = appliedState.placement
                     appliedState.placement = currentState.placement
                     appliedState.isMinimized = currentState.isMinimized
                 }
@@ -205,6 +206,7 @@ fun Window(
                             // fire windowStateChanged, only componentResized
                             currentState.placement = placement
                             currentState.size = DpSize(width.dp, height.dp)
+                            previousPlacement = appliedState.placement
                             appliedState.placement = currentState.placement
                             appliedState.size = currentState.size
                         }
@@ -249,6 +251,7 @@ fun Window(
             }
             if (state.placement != appliedState.placement) {
                 window.placement = state.placement
+                window.previousPlacement = appliedState.placement
                 appliedState.placement = state.placement
             }
             if (state.isMinimized != appliedState.isMinimized) {
