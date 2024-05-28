@@ -340,7 +340,7 @@ internal class ComposeContainer(
         return if (useSwingGraphics) {
             SwingSkiaLayerComponent(mediator, renderDelegate, skiaLayerAnalytics)
         } else {
-            WindowSkiaLayerComponent(mediator, windowContext, renderDelegate, skiaLayerAnalytics)
+            WindowSkiaLayerComponent(mediator, windowContext, renderDelegate, skiaLayerAnalytics, reducePresentationLatency)
         }
     }
 
