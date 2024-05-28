@@ -78,6 +78,7 @@ import org.jetbrains.skiko.SkiaLayerAnalytics
  *  for window coordinate space.
  * @property useSwingGraphics Flag indicating if offscreen rendering to Swing graphics is used.
  * @property layerType The type of layer used for Popup/Dialog.
+ * @property reducePresentationLatency Flag indicating that attempt to reduce presentation latency should be made.
  */
 internal class ComposeContainer(
     val container: JLayeredPane,
@@ -88,6 +89,7 @@ internal class ComposeContainer(
 
     private val useSwingGraphics: Boolean = ComposeFeatureFlags.useSwingGraphics,
     private val layerType: LayerType = ComposeFeatureFlags.layerType,
+    private val reducePresentationLatency: Boolean? = null
 ) : WindowFocusListener, WindowListener, LifecycleOwner, ViewModelStoreOwner {
     val windowContext = PlatformWindowContext()
     var window: Window? = null
@@ -381,7 +383,8 @@ internal class ComposeContainer(
                 density = density,
                 layoutDirection = layoutDirection,
                 focusable = focusable,
-                compositionContext = compositionContext
+                compositionContext = compositionContext,
+                reducePresentationLatency = reducePresentationLatency
             )
             LayerType.OnComponent -> SwingComposeSceneLayer(
                 composeContainer = this,
@@ -389,7 +392,8 @@ internal class ComposeContainer(
                 density = density,
                 layoutDirection = layoutDirection,
                 focusable = focusable,
-                compositionContext = compositionContext
+                compositionContext = compositionContext,
+                reducePresentationLatency = reducePresentationLatency
             )
             else -> error("Unexpected LayerType")
         }

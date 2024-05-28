@@ -52,7 +52,8 @@ internal class WindowComposeSceneLayer(
     density: Density,
     layoutDirection: LayoutDirection,
     focusable: Boolean,
-    compositionContext: CompositionContext
+    compositionContext: CompositionContext,
+    private val reducePresentationLatency: Boolean?,
 ) : DesktopComposeSceneLayer(composeContainer, density, layoutDirection) {
     private val window get() = requireNotNull(composeContainer.window)
     private val windowContext = PlatformWindowContext().also {
@@ -193,7 +194,8 @@ internal class WindowComposeSceneLayer(
             mediator = mediator,
             windowContext = windowContext,
             renderDelegate = renderDelegate,
-            skiaLayerAnalytics = skiaLayerAnalytics
+            skiaLayerAnalytics = skiaLayerAnalytics,
+            reducePresentationLatency = reducePresentationLatency
         )
     }
 

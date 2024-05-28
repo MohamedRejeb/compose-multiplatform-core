@@ -35,6 +35,7 @@ import javax.swing.JLayeredPane
 import javax.swing.SwingUtilities.isEventDispatchThread
 import org.jetbrains.skiko.GraphicsApi
 import org.jetbrains.skiko.SkiaLayerAnalytics
+import org.jetbrains.skiko.SkikoProperties
 
 /**
  * ComposePanel is a panel for building UI using Compose for Desktop.
@@ -46,7 +47,28 @@ import org.jetbrains.skiko.SkiaLayerAnalytics
 class ComposePanel @ExperimentalComposeUiApi constructor(
     private val skiaLayerAnalytics: SkiaLayerAnalytics,
 ) : JLayeredPane() {
+    private var reducePresentationLatency: Boolean? = null
+
     constructor() : this(SkiaLayerAnalytics.Empty)
+
+    /**
+     * Creates a ComposePanel with the specified forceReducedLatency flag.
+     *
+     * @param reducePresentationLatency If true, the ComposePanel will try to reduce presentation latency when rendering.
+     * This flag is a hint and may not be respected by the underlying implementation.
+     * The reduction of latency may come at the cost of visual artifacts like screen tearing.
+     *
+     * If not set, the parameter from [SkikoProperties] will be used.
+     * @see [SkikoProperties.vsyncEnabled]
+     *
+     * @param skiaLayerAnalytics Analytics that helps to know more about SkiaLayer behaviour.
+     */
+    constructor(
+        reducePresentationLatency: Boolean,
+        skiaLayerAnalytics: SkiaLayerAnalytics = SkiaLayerAnalytics.Empty,
+    ) : this(skiaLayerAnalytics) {
+        this.reducePresentationLatency = reducePresentationLatency
+    }
 
     init {
         check(isEventDispatchThread()) {
@@ -196,7 +218,8 @@ class ComposePanel @ExperimentalComposeUiApi constructor(
         return ComposeContainer(
             container = this,
             skiaLayerAnalytics = skiaLayerAnalytics,
-            windowContainer = windowContainer
+            windowContainer = windowContainer,
+            reducePresentationLatency = reducePresentationLatency
         ).apply {
             focusManager.releaseFocus()
             setBounds(0, 0, width, height)

@@ -43,7 +43,8 @@ internal class SwingComposeSceneLayer(
     density: Density,
     layoutDirection: LayoutDirection,
     focusable: Boolean,
-    compositionContext: CompositionContext
+    compositionContext: CompositionContext,
+    reducePresentationLatency: Boolean?,
 ) : DesktopComposeSceneLayer(composeContainer, density, layoutDirection) {
     private val backgroundMouseListener = object : MouseAdapter() {
         override fun mousePressed(event: MouseEvent) = onMouseEventOutside(event)
