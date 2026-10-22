@@ -27,8 +27,9 @@ import androidx.compose.ui.unit.IntSize
  * The geometry of the text of a text field, as the platform input method reads it: where the
  * lines and the caret are and which character is at a position, in the coordinates of the text.
  *
- * It lets a text field that does not lay its text out into a [TextLayoutResult] describe its
- * layout to the input method. Use [PlatformTextLayout] to wrap a [TextLayoutResult].
+ * The default implementation, `PlatformTextLayout(textLayoutResult)`, proxies to a
+ * [TextLayoutResult]. A text field whose layout is not described by a [TextLayoutResult]
+ * implements this interface.
  *
  * @see PlatformTextInputMethodRequest.textLayout
  */
@@ -81,7 +82,7 @@ interface PlatformTextLayout {
     fun getHorizontalPosition(offset: Int, usePrimaryDirection: Boolean): Float
 }
 
-/** The geometry of [textLayoutResult] as a [PlatformTextLayout]. */
+/** Creates the default [PlatformTextLayout], which proxies every query to [textLayoutResult]. */
 @ExperimentalComposeUiApi
 fun PlatformTextLayout(textLayoutResult: TextLayoutResult): PlatformTextLayout =
     TextLayoutResultPlatformTextLayout(textLayoutResult)
